@@ -1,0 +1,1042 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Express API for Lionera",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Design",
+      "description": "Everything about Designs"
+    },
+    {
+      "name": "Occasion",
+      "description": "Everything about Occasions"
+    },
+    {
+      "name": "Addon",
+      "description": "Everything about Addons"
+    },
+    {
+      "name": "Form",
+      "description": "Everything about Forms"
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:8000/api/v1",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/designs": {
+      "get": {
+        "tags": ["Design"],
+        "summary": " Retrieve all designs.",
+        "description": " Retrieve all designs.",
+        "responses": {
+          "200": {
+            "description": "A list of Designs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": "true"
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "designs": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Design"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Design"],
+        "summary": "Create a Design.",
+        "description": "Create New Design.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DesignPostBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created Design.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "design": {
+                          "$ref": "#/components/schemas/Design"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/designs/{designId}": {
+      "delete": {
+        "tags": ["Design"],
+        "summary": "Delete a Design.",
+        "description": "Delete Design.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "designId",
+            "required": true,
+            "description": "ID of the design to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": " Deleted Design.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "Design": {
+                          "$ref": "#/components/schemas/Design"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/designs/{designId}/add": {
+      "put": {
+        "tags": ["Design"],
+        "summary": "Add To Design Gallery.",
+        "description": "Add To Design Gallery.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "designId",
+            "required": true,
+            "description": "ID of the design to add.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "example": "https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": " Updated Design.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "design": {
+                          "$ref": "#/components/schemas/Design"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/designs/{designId}/remove/{galleryId}": {
+      "put": {
+        "tags": ["Design"],
+        "summary": "Remove From Design Gallery.",
+        "description": "Remove From Design Gallery.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "designId",
+            "required": true,
+            "description": "ID of the design to add.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "galleryId",
+            "required": true,
+            "description": "ID of the gallery to remove.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Design.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "design": {
+                          "$ref": "#/components/schemas/Design"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/occasions": {
+      "get": {
+        "tags": ["Occasion"],
+        "summary": " Retrieve all occasions.",
+        "description": " Retrieve all occasions.",
+        "responses": {
+          "200": {
+            "description": "A list of occasions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": "true"
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "occasions": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Occasion"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Occasion"],
+        "summary": "Create a occasion.",
+        "description": "Create New occasion.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OccasionPostBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created occasion.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "occasion": {
+                          "$ref": "#/components/schemas/occasion"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/occasions/{occasionId}": {
+      "put": {
+        "tags": ["Occasion"],
+        "summary": "update a occasion.",
+        "description": "update occasion.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "occasionId",
+            "required": true,
+            "description": "ID of the occasion to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OccasionPostBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "updated occasion.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "occasion": {
+                          "$ref": "#/components/schemas/occasion"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Occasion"],
+        "summary": "Delete occasion.",
+        "description": "Delete occasion.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "occasionId",
+            "required": true,
+            "description": "ID of the occasion to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": " Deleted occasion.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "occasion": {
+                          "$ref": "#/components/schemas/Occasion"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/addons": {
+      "get": {
+        "tags": ["Addon"],
+        "summary": " Retrieve all addons.",
+        "description": " Retrieve all addons.",
+        "responses": {
+          "200": {
+            "description": "A list of addons.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": "true"
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "addons": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Addon"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Addon"],
+        "summary": "Create addon.",
+        "description": "Create New addon.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddonPostBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created addon.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "addon": {
+                          "$ref": "#/components/schemas/Addon"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/addons/{addonId}": {
+      "put": {
+        "tags": ["Addon"],
+        "summary": "update a addon.",
+        "description": "update addon.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "addonId",
+            "required": true,
+            "description": "ID of the addon to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddonPostBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "updated addon.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "addon": {
+                          "$ref": "#/components/schemas/Addon"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Addon"],
+        "summary": "Delete addon.",
+        "description": "Delete addon.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "addonId",
+            "required": true,
+            "description": "ID of the addon to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": " Deleted addon.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "addon": {
+                          "$ref": "#/components/schemas/Addon"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/forms": {
+      "get": {
+        "tags": ["Form"],
+        "summary": " Retrieve all forms.",
+        "description": " Retrieve all forms.",
+        "responses": {
+          "200": {
+            "description": "A list of forms.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": "true"
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "forms": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Form"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Form"],
+        "summary": "Create form.",
+        "description": "Create New form.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FormPostBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created form.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "form": {
+                          "$ref": "#/components/schemas/Form"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forms/{formId}": {
+      "put": {
+        "tags": ["Form"],
+        "summary": "update a form.",
+        "description": "update form.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "formId",
+            "required": true,
+            "description": "ID of the form to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FormPostBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "updated form.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "form": {
+                          "$ref": "#/components/schemas/Form"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Form"],
+        "summary": "Delete form.",
+        "description": "Delete form.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "formId",
+            "required": true,
+            "description": "ID of the form to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": " Deleted form.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "form": {
+                          "$ref": "#/components/schemas/Form"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DesignPostBody": {
+        "type": "object",
+        "properties": {
+          "occasion": {
+            "type": "string",
+            "description": "Object ID of occasion",
+            "example": "6039d687026eca0d58ac3e88"
+          },
+
+          "gallery": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "description": "Image URL.",
+                  "example": "https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Design": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Object ID.",
+            "example": "6039d687026eca0d58ac3e88"
+          },
+          "occasion": {
+            "type": "string",
+            "description": "Object ID of occasion.",
+            "example": "6039d687026eca0d58ac3e88"
+          },
+          "gallery": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Object id.",
+                  "example": "6039d687026eca0d58ac3e87"
+                },
+                "url": {
+                  "type": "string",
+                  "description": "Image URL.",
+                  "example": "https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png"
+                }
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+
+      "Occasion": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Object ID.",
+            "example": "6039d687026eca0d58ac3e88"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of occasion.",
+            "example": "A new title"
+          },
+          "thumbnails": {
+            "type": "string",
+            "description": "thumbnails of occasion.",
+            "example": "A new thumbnail"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "OccasionPostBody": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of occasion.",
+            "example": "A new title"
+          },
+          "thumbnails": {
+            "type": "string",
+            "description": "thumbnails of occasion.",
+            "example": "A new thumbnail"
+          }
+        }
+      },
+
+      "Addon": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Object ID.",
+            "example": "6039d687026eca0d58ac3e88"
+          },
+          "title": {
+            "type": "string",
+            "example": "A new title"
+          },
+          "price": {
+            "type": "number",
+            "example": 300
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "label": {
+            "type": "string",
+            "example": "New Label"
+          },
+          "inputType": {
+            "type": "string",
+            "example": "File"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AddonPostBody": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "A new title"
+          },
+          "price": {
+            "type": "number",
+            "example": 300
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "label": {
+            "type": "string",
+            "example": "New Label"
+          },
+          "inputType": {
+            "type": "string",
+            "example": "File"
+          }
+        }
+      },
+
+      "Form": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Object ID.",
+            "example": "6039d687026eca0d58ac3e88"
+          },
+          "title": {
+            "type": "string",
+            "example": "New Title"
+          },
+          "label": {
+            "type": "string",
+            "example": "New Title"
+          },
+          "inputType": {
+            "type": "string",
+            "example": "File"
+          },
+          "package": {
+            "type": "string",
+            "example": "New package"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "FormPostBody": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "New Title"
+          },
+          "label": {
+            "type": "string",
+            "example": "New Title"
+          },
+          "inputType": {
+            "type": "string",
+            "example": "File"
+          },
+          "package": {
+            "type": "string",
+            "example": "New package"
+          }
+        }
+      },
+
+      "Error": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": "false"
+          },
+          "status": {
+            "type": "number",
+            "description": "The status of the operation",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "The message of the operation",
+            "example": "Please enter {missing_parameter}"
+          }
+        }
+      }
+    }
+  }
+}
