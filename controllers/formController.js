@@ -7,15 +7,22 @@ const catchAsync = require('../utils/catchAsync');
 
 // Function to get all forms
 const getForms = catchAsync(async (req, res, next) => {
-  let { lang } = req.query;
+  let { lang, packageId } = req.query;
 
   let forms;
   if (lang === 'both') {
-    forms = await FormModel.find();
+    forms = packageId
+      ? await FormModel.find({ package: packageId })
+      : await FormModel.find();
   } else {
     const unselectedLang = lang === 'ar' ? 'en' : 'ar';
-    forms = await FormModel.find().select(`-${unselectedLang}`);
+    forms = packageId
+      ? await FormModel.find({ package: packageId }).select(
+          `-${unselectedLang}`,
+        )
+      : await FormModel.find().select(`-${unselectedLang}`);
   }
+
   res.status(200).json({
     success: true,
     body: { forms },
