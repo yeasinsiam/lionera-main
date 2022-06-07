@@ -75,7 +75,6 @@ const addBenefitToPackage = catchAsync(async (req, res, next) => {
 // Function to remove a package
 const removeBenefitFromPackage = catchAsync(async (req, res, next) => {
   const { packageId, benefitId } = req.params;
-  console.log(req.params);
   const packageData = await PackageModel.findById(packageId);
   if (!packageData) return next(new AppError('Not Found', 404));
 
