@@ -23,7 +23,7 @@ const getOrders = catchAsync(async (req, res, next) => {
     .populate('occasion', `${unselectedLang}`)
     .populate('design', `${unselectedLang}`)
     .populate('slideshow', `${unselectedLang}`)
-    .populate('package', `${unselectedLang}`)
+    .populate('package')
     .populate('addons', `${unselectedLang}`);
   // .populate('shipping', `${unselectedLang}`)
 
@@ -101,7 +101,7 @@ const getOrderById = catchAsync(async (req, res, next) => {
     .populate('occasion', `${unselectedLang}`)
     .populate('design', `${unselectedLang}`)
     .populate('slideshow', `${unselectedLang}`)
-    .populate('package', `${unselectedLang}`)
+    .populate('package')
     .populate('addons', `${unselectedLang}`);
   // .populate('shipping', `${unselectedLang}`)
 
