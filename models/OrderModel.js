@@ -96,7 +96,7 @@ const orderSchema = new Schema(
     financial_status: {
       type: String,
       trim: true,
-      enum: ['paid', 'unpaid'],
+      enum: ['paid', 'unpaid','refund'],
       default: 'unpaid',
     },
 

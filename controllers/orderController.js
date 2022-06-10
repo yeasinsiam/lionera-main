@@ -9,16 +9,30 @@ const moment = require('moment');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const FormDataModel = require('../models/formDataModel');
+var ObjectID = require('mongodb').ObjectID;
 
 // Function to get all orders
 const getOrders = catchAsync(async (req, res, next) => {
-  let { lang } = req.query;
+  let { lang, search } = req.query;
+
   let unselectedLang = '';
   if (lang !== 'both') {
     unselectedLang = lang === 'ar' ? '-en' : '-ar';
   }
 
-  const orders = await OrderModel.find()
+  let searchQuary =  search ?
+    ObjectID.isValid(search) ? 
+      {
+        $or:[
+          {'_id': search}
+        ]
+      } : {
+        $or:[
+          {'shipping.email': search},
+        ]
+      } : {};
+    
+  const orders = await OrderModel.find(searchQuary)
     .select(`${unselectedLang}`)
     .populate('occasion', `${unselectedLang}`)
     .populate('design', `${unselectedLang}`)
