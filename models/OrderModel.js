@@ -25,6 +25,16 @@ const shippingSchema = new Schema(
       },
     },
 
+    
+
+    shippingArea: {
+      type: Schema.Types.ObjectId,
+      ref: 'shippingArea',
+      trim: true,
+      required: [true, 'Please Enter ShipingArea code'],
+    },
+
+
     areaCode: {
       type: String,
       trim: true,
@@ -83,6 +93,27 @@ const shippingSchema = new Schema(
     _id: false,
   },
 );
+
+
+const priceSchema = new Schema({
+  AED: {
+    subTotal: {
+      type: Number,
+      trim: true,
+      required: [true, 'Please Enter Sub total'],
+    },
+    shippingCharge: {
+      type: Number,
+      trim: true,
+      required: [true, 'Please Enter Shipping Chargee'],
+    },
+    totalPrice: {
+      type: Number,
+      trim: true,
+      required: [true, 'Please Enter total Price'],
+    },
+  }
+})
 
 // Creating a schema
 const orderSchema = new Schema(
@@ -148,6 +179,13 @@ const orderSchema = new Schema(
       type: shippingSchema,
       required: true,
     },
+
+    prices: {
+      type: priceSchema,
+      required: true
+    }
+
+
   },
   {
     timestamps: true,

@@ -1,5 +1,6 @@
 'use strict';
 
+const { Mongoose } = require('mongoose');
 const AddonModel = require('../models/addonModel');
 // Importing the model
 const AppError = require('../utils/appError');
@@ -7,15 +8,23 @@ const catchAsync = require('../utils/catchAsync');
 
 // Function to get all addons
 const getAddons = catchAsync(async (req, res, next) => {
-  let { lang } = req.query
+  let { lang, ids } = req.query
 
   let addons
-  if (lang === 'both') {
-    addons = await AddonModel.find();
-  } else {
-    const unselectedLang = lang === 'ar' ? 'en' : 'ar'
-    addons = await AddonModel.find().select(`-${unselectedLang}`);
+
+  if(ids){
+    const  idsObj  = ids.split(',')
+    addons = await AddonModel.find().where('_id').in(idsObj).exec();
+  }else{
+    if (lang === 'both') {
+      addons = await AddonModel.find();
+    } else {
+      const unselectedLang = lang === 'ar' ? 'en' : 'ar'
+      addons = await AddonModel.find().select(`-${unselectedLang}`);
+    }
   }
+ 
+
 
   res.status(200).json({
     success: true,

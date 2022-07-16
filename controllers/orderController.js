@@ -38,7 +38,8 @@ const getOrders = catchAsync(async (req, res, next) => {
     .populate('design', `${unselectedLang}`)
     .populate('slideshow', `${unselectedLang}`)
     .populate('package')
-    .populate('addons', `${unselectedLang}`);
+    .populate('addons', `${unselectedLang}`)
+    .populate('shipping.shippingArea', `${unselectedLang}`);
   // .populate('shipping', `${unselectedLang}`)
 
   res.status(200).json({
@@ -116,7 +117,8 @@ const getOrderById = catchAsync(async (req, res, next) => {
     .populate('design', `${unselectedLang}`)
     .populate('slideshow', `${unselectedLang}`)
     .populate('package')
-    .populate('addons', `${unselectedLang}`);
+    .populate('addons', `${unselectedLang}`)
+    .populate('shipping.shippingArea', `${unselectedLang}`);
   // .populate('shipping', `${unselectedLang}`)
 
   res.status(200).json({

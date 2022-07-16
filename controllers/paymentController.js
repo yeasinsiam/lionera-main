@@ -12,85 +12,87 @@ let client = new paypal.core.PayPalHttpClient(environment);
 
 
 
-const createOrder = async(req,res,next)=>{
-try{
-    const {orderId}=req.body;
-    let unselectedLang="en"
-    const order = await OrderModel.findById(orderId)
-    .populate('package')
-    .populate('addons')
-
-    let totalPrice =order.package.price.AED;
-    order.addons.map(item=>{
-        totalPrice=totalPrice+item.price;
-    })
+const createOrder = async (req, res, next) => {
+    try {
+        const { orderId } = req.body;
+        let unselectedLang = "en"
+        const order = await OrderModel.findById(orderId)
+            .populate('package')
+            .populate('addons')
 
 
-    let request = new paypal.orders.OrdersCreateRequest();
-    request.requestBody({
-                        "intent": "CAPTURE",
-                        "application_context": {
-                            "return_url": `${process.env.CLIENT_URL}/success`,
-                            "cancel_url": `${process.env.CLIENT_URL}/cancel`,
-                            "brand_name": "Lionera",
-                            "locale": "en-US",
-                            "landing_page": "BILLING",
-                            "user_action": "CONTINUE"
-                        },
-                        "purchase_units": [
-                            {
-                                "reference_id":orderId,
-                                "amount": {
-                                    "currency_code": "USD",
-                                    "value": totalPrice
-                                }
-                            }
-                        ]
-    });
+        let totalPrice = order.prices.AED.totalPrice;
+        // order.addons.map(item => {
+        //     totalPrice = totalPrice + item.price;
+        // })
 
-    const response = await client.execute(request);
+
+
+        let request = new paypal.orders.OrdersCreateRequest();
+        request.requestBody({
+            "intent": "CAPTURE",
+            "application_context": {
+                "return_url": `${process.env.CLIENT_URL}/success`,
+                "cancel_url": `${process.env.CLIENT_URL}/cancel`,
+                "brand_name": "Lionera",
+                "locale": "en-US",
+                "landing_page": "BILLING",
+                "user_action": "CONTINUE"
+            },
+            "purchase_units": [
+                {
+                    "reference_id": orderId,
+                    "amount": {
+                        "currency_code": "USD",
+                        "value": totalPrice
+                    }
+                }
+            ]
+        });
+
+        const response = await client.execute(request);
         res.send({
-        status:true,
-        href:response.result.links[1].href
-    })
+            status: true,
+            href: response.result.links[1].href
+        })
 
-}catch(err){
-    res.send({
-        status:false
-    })
+    } catch (err) {
+        res.send({
+            status: false
+        })
+    }
 }
-}
 
-const successOrder = async(req,res,next)=>{
+const successOrder = async (req, res, next) => {
 
-    try{
+    try {
         const token = req.query.token;
-         let  request = new paypal.orders.OrdersCaptureRequest(token);
+        let request = new paypal.orders.OrdersCaptureRequest(token);
         let response = await client.execute(request);
-    
-        const order = await OrderModel.findByIdAndUpdate(response.result.purchase_units[0].reference_id,{financial_status:"paid"}).populate("design").populate("occasion")
-        .populate("package").populate("addons").populate("slideshow");
+
+        const order = await OrderModel.findByIdAndUpdate(response.result.purchase_units[0].reference_id, { financial_status: "paid" }).populate("design").populate("occasion")
+            .populate("package").populate("addons").populate("slideshow");
 
         // const order = await OrderModel.findByIdAndUpdate("60ed5885d14f5005281c6730",{financial_status:"paid"}).populate("design").populate("occasion")
         // .populate("package").populate("addons").populate("slideshow");
 
-        sendEmail(order.shipping.email,"order_confirm",order);
-        
-        
+        sendEmail(order.shipping.email, "order_confirm", order);
+
+
 
         // res.redirect(`http://localhost:3000/success/${response.result.purchase_units[0].reference_id}`)
-   
+
         res.send({
-            status:true,
-            order:order
+            status: true,
+            order: order
         })
-        
-    }catch(err){
+
+    } catch (err) {
         console.log(err)
 
         res.status(500).send({
-            status:false,
-            message:err
+            status: false,
+            message: err
         })
         console.log(err)
     }
@@ -99,7 +101,7 @@ const successOrder = async(req,res,next)=>{
 
 }
 
-module.exports={
+module.exports = {
     successOrder,
     createOrder
 }
